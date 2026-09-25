@@ -1,0 +1,42 @@
+{
+  "country": "Bangladesh",
+  "locations": [
+    {
+      "latitude": 23.8103,
+      "longitude": 90.4125,
+      "name": "Dhaka"
+    },
+    {
+      "latitude": 22.3569,
+      "longitude": 91.7832,
+      "name": "Chattogram"
+    },
+    {
+      "latitude": 24.8949,
+      "longitude": 91.8687,
+      "name": "Sylhet"
+    },
+    {
+      "latitude": 24.3745,
+      "longitude": 88.6042,
+      "name": "Rajshahi"
+    },
+    {
+      "latitude": 22.8456,
+      "longitude": 89.5403,
+      "name": "Khulna"
+    }
+  ],
+  "prayer_methods": [
+    {
+      "id": 1,
+      "name": "Karachi"
+    },
+    {
+      "id": 2,
+      "name": "ISNA"
+    }
+  ],
+  "timezone": "Asia/Dhaka",
+  "version": 1
+}

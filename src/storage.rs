@@ -1,0 +1,7 @@
+use crate::model::AppData;
+const KEY:&str="mrmunna_web_v1";
+pub fn load()->AppData{web_sys::window().and_then(|w|w.local_storage().ok().flatten()).and_then(|s|s.get_item(KEY).ok().flatten()).and_then(|x|serde_json::from_str(&x).ok()).unwrap_or_default()}
+pub fn save(data:&AppData)->Result<(),String>{let text=serde_json::to_string(data).map_err(|e|e.to_string())?;let store=web_sys::window().and_then(|w|w.local_storage().ok().flatten()).ok_or("Browser storage is unavailable")?;store.set_item(KEY,&text).map_err(|_|"Storage is full or unavailable. Export a backup before adding more data.".to_string())}
+pub fn validate_backup(s:&str)->Result<AppData,String>{let v:serde_json::Value=serde_json::from_str(s).map_err(|_|"Invalid backup file".to_string())?;if v.get("format").and_then(|v|v.as_str())!=Some("mrmunna-web-v1"){return Err("Unsupported backup format".into())}let d:AppData=serde_json::from_value(v.get("data").cloned().ok_or("Backup has no records")?).map_err(|_|"Backup contains invalid records".to_string())?;let mut ids=std::collections::HashSet::new();if d.entries.iter().any(|e|!ids.insert(&e.id)){return Err("Duplicate entry IDs".into())}Ok(d)}
+pub fn export(data:&AppData)->Result<String,String>{Ok(serde_json::json!({"format":"mrmunna-web-v1","data":data}).to_string())}
+#[cfg(test)]mod tests{use super::*;#[test]fn roundtrip(){let d=AppData::default();assert_eq!(validate_backup(&export(&d).unwrap()).unwrap(),d);assert!(validate_backup("{}").is_err());assert!(validate_backup("").is_err())}}
